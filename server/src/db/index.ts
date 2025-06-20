@@ -25,7 +25,7 @@ const bookSchema = new mongoose.Schema({
     reviews:[String],
     ratings:{
         count:Number,
-        value:Number
+        value:{default:0,type:Number}
     }
 })
 

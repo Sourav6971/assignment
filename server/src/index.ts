@@ -4,8 +4,11 @@ import adminMiddleware from "./middlewares/admin";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import "dotenv/config"
+import cors from "cors"
+
 
 const app= express();
+app.use(cors());
 
 app.use(express.json())
 
@@ -72,7 +75,7 @@ app.post("/signin",async(req,res)=>{
                 return
             }
             const token = await jwt.sign(user._id.toString(),secret);
-            res.json({msg:"User signed in",token})
+            res.json({msg:"User signed in",token,firstName:user.firstName,lastName:user.lastName,role:"user"})
             return;
         }
         case "admin":{
@@ -91,7 +94,8 @@ app.post("/signin",async(req,res)=>{
             const token= await jwt.sign(admin._id.toString(),secret);
             res.json({
                 msg:"Admin signed in",
-                token
+                token,
+                role:"admin"
             })
         }
     }
@@ -115,7 +119,7 @@ if(id){
     if(!data)
     {res.json({msg:"Book does not exist"})
 return}
-res.json({data})
+res.json({books:data})
 }
 const end= Number(page)*10+1;
 const start= end-10;
